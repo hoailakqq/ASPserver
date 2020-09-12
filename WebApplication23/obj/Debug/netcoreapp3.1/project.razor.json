@@ -1,0 +1,25 @@
+{
+  "FilePath": "f:\\FinallyYear\\token\\asp\\aaa\\ASPserver\\WebApplication23\\WebApplication23.csproj",
+  "Configuration": {
+    "ConfigurationName": "MVC-3.0",
+    "LanguageVersion": "3.0",
+    "Extensions": [
+      {
+        "ExtensionName": "MVC-3.0"
+      }
+    ]
+  },
+  "ProjectWorkspaceState": {
+    "TagHelpers": [],
+    "CSharpLanguageVersion": 800
+  },
+  "RootNamespace": "WebApplication23",
+  "Documents": [
+    {
+      "FilePath": "f:\\FinallyYear\\token\\asp\\aaa\\ASPserver\\WebApplication23\\Views\\Index.cshtml",
+      "TargetPath": "Views\\Index.cshtml",
+      "FileKind": "mvc"
+    }
+  ],
+  "SerializationFormat": "0.2"
+}
