@@ -46,5 +46,11 @@ namespace WebApplication23.Models
         public QuestionModel()
         {
         }
+
+        public QuestionModel(string title_question, string question)
+        {
+            this.title_question = title_question;
+            Question = question;
+        }
     }
 }

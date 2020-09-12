@@ -9,7 +9,11 @@ using System.Text;
 using WebApplication23.Entities;
 using WebApplication23.Models;
 using WebApplication23.Helpers;
-using WebApplication23.Models.Table;
+using System.IO;
+using System.Data;
+using ExcelDataReader;
+using OfficeOpenXml;
+using System.Collections.Generic;
 
 namespace WebApplication23.Controllers
 {
@@ -473,9 +477,165 @@ namespace WebApplication23.Controllers
         [HttpGet]
         public IActionResult getDataQuesionSource()
         {
-            var qr = dbS.Questions.ToList();
+            List<QuestionModel> users = new List<QuestionModel>();
+            String path = @"D:\Book2.xlsx";
+            // For .net core, the next line requires the NuGet package, 
+            // System.Text.Encoding.CodePages
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            using (var stream = System.IO.File.Open(path, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    while (reader.Read()) //Each row of the file
+                    {
+                        int id_Lession = 1;
+                        int id_Part = 10;
+                        string Title_question = "";
+                        string question = "";
+                        string dapanA = "";
+                        string dapanB = "";
+                        string dapanC = "";
+                        string dapanD = "";
+                        string answer = "";
+                        string Description = "";
+                        string sound = "";
+                        string image = "";
+                        try
+                        {
+                            if (reader.GetValue(0) != null) id_Lession = Int32.Parse(reader.GetValue(0).ToString());
+                            if (reader.GetValue(1) != null) id_Part = Int32.Parse(reader.GetValue(1).ToString());
+                            if (reader.GetValue(2) != null) Title_question = reader.GetValue(2).ToString();
+                            if (reader.GetValue(3) != null) question = reader.GetValue(3).ToString();
+                            if (reader.GetValue(4) != null) dapanA = reader.GetValue(4).ToString();
+                            if (reader.GetValue(5) != null) dapanB = reader.GetValue(5).ToString();
+                            if (reader.GetValue(6) != null) dapanC = reader.GetValue(6).ToString();
+                            if (reader.GetValue(7) != null) dapanD = reader.GetValue(7).ToString();
+                            if (reader.GetValue(8) != null) answer = reader.GetValue(8).ToString();
+                            if (reader.GetValue(9) != null) Description = reader.GetValue(9).ToString();
+                            if (reader.GetValue(10) != null) sound = reader.GetValue(10).ToString();
+                            if (reader.GetValue(11) != null) image = reader.GetValue(11).ToString();
+                        }
+                        catch (Exception e)
+                        {
 
-            return Ok(qr);
+                        }
+                        dbS.Questions.Add(new QuestionModel
+                        {
+                            Id_Lession = id_Lession,
+                            Id_Part = id_Part,
+                            title_question = Title_question,
+                            Question = question,
+                            DapanA = dapanA,
+                            DapanB = dapanB,
+                            DapanC = dapanC,
+                            DapanD = dapanD,
+                            Answer = answer,
+                            description = Description,
+                            Sound = sound,
+                            Image = image,
+                            isActive = 1
+                        });
+
+                    }
+
+
+                }
+
+            }
+            int output = dbS.SaveChanges();
+            if (output > 0)
+            {
+                return Ok(true);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [Route("Home/getCheckQuestions")]
+        [HttpGet]
+        public IActionResult getCheckQuestions()
+        {
+                try
+                {
+                   var qr = dbS.Questions.ToList();
+                    return Ok(qr);
+                }
+                catch (Exception e)
+                {
+                    return Ok(e.Message);
+                }
+
+        }
+
+        [Route("Home/pushData")]
+        [HttpPost]
+        public IActionResult pushData([FromBody] GetID user)
+        {
+            if (user != null)
+            {
+                try
+                {
+                    var qr = dbS.Questions.FromSqlRaw("SELECT * FROM `question` WHERE `id` = " + user.Id).ToList();
+                    db.Questions.Add(new QuestionModel
+                    {
+                        Id_Lession = qr[0].Id_Lession,
+                        Id_Part = qr[0].Id_Part,
+                        title_question = qr[0].title_question,
+                        Question = qr[0].Question,
+                        DapanA = qr[0].DapanA,
+                        DapanB = qr[0].DapanB,
+                        DapanC = qr[0].DapanC,
+                        DapanD = qr[0].DapanD,
+                        Answer = qr[0].Answer,
+                        description = qr[0].description,
+                        Sound = qr[0].Sound,
+                        Image = qr[0].Image,
+                        isActive = 1
+                    });
+                    int output = db.SaveChanges();
+                    dbS.Questions.FromSqlRaw("DELETE FROM `learning1`.`question` WHERE `id` = " + user.Id).ToList();
+                        
+                    if (output > 0)
+                    {
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                catch (Exception e)
+                {
+
+                 
+                }
+
+
+            }
+            return Ok("loi");
+
+        }
+        [Route("Home/delQuesionSById")]
+        [HttpPost]
+        public IActionResult delQuesionSById([FromBody] GetID user)
+        {
+            if (user != null)
+            {
+                try
+                {
+                    dbS.Questions.FromSqlRaw("DELETE FROM `learning1`.`question` WHERE `id` = " + user.Id).ToList();
+                }
+                catch (Exception)
+                {
+
+                  
+                }
+
+                return Ok("success");
+            }
+            return Ok("loi");
+
         }
     }
 }

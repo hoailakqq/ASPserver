@@ -16,7 +16,7 @@ namespace WebApplication23.Models
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
             var configuration = builder.Build();
-            optionsBuilder.UseMySql(configuration["ConnectionStrings:DefaultConnection"]);
+            optionsBuilder.UseMySql(configuration["ConnectionStrings:SourceConnection"]);
         }
         public DbSet<QuestionModel> Questions { get; set; }
         public DbSet<Dictionary> Dictionaries { get; set; }
