@@ -35,7 +35,7 @@ namespace UploadFilesServer.Controllers
                     }
 
                     //a
-                    string path = @"D:\Book2.xlsx";
+                    string path = @"F:\FinallyYear\New folder\New folder\severNet\WebApplication23\StaticFiles\Images\Book2.xlsx";
                     // For .net core, the next line requires the NuGet package, 
                     // System.Text.Encoding.CodePages
                     System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

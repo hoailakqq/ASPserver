@@ -14,8 +14,6 @@ namespace WebApplication23.Models
             [Key]
             public int Id { get; set; }
             public string Name { get; set; }
-            public string Color1 { get; set; }
-            public string Color2 { get; set; }
             public string Image { get; set; }
             public string Link { get; set; }
             public int isActive { get; set; }
